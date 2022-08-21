@@ -1,0 +1,45 @@
+#!/usr/bin/python3 
+
+import requests
+import sys
+from bs4 import BeautifulSoup
+
+numero = sys.argv[1]
+
+cookies = {
+    'csrftoken': 'zuaHoe15teZQabfgS4YmmaAIEYAki21xVtcYRpnimIvvP2bASWq9qSAnNERUl5IZ',
+}
+
+headers = {
+    'authority': 'bacc.univ-toamasina.mg',
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+    'cache-control': 'no-cache',
+    'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7B79jHai1TSaCuXq',
+    # 'cookie': 'csrftoken=zuaHoe15teZQabfgS4YmmaAIEYAki21xVtcYRpnimIvvP2bASWq9qSAnNERUl5IZ',
+    'origin': 'https://bacc.univ-toamasina.mg',
+    'pragma': 'no-cache',
+    'referer': 'https://bacc.univ-toamasina.mg/',
+    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="104"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Linux"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+    'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.79 Safari/537.36',
+}
+
+data = f'------WebKitFormBoundary7B79jHai1TSaCuXq\r\nContent-Disposition: form-data; name="csrfmiddlewaretoken"\r\n\r\nTrIXhnmtyzvUwOOUqZK1h8NaFJ3p6qACfqKeKyIGr31zbFKeqRcOlQNPOpkZ9th4\r\n------WebKitFormBoundary7B79jHai1TSaCuXq\r\nContent-Disposition: form-data; name="q"\r\n\r\n{numero}\r\n------WebKitFormBoundary7B79jHai1TSaCuXq--\r\n'
+
+response = requests.post('https://bacc.univ-toamasina.mg/', cookies=cookies, headers=headers, data=data)
+
+soup = BeautifulSoup(response.text, 'html.parser')
+res = soup.find('caption')
+
+if 'Félicitations' in res.text:
+    for tr in soup.find('table').find('tbody'):
+        print(tr.text)
+else:
+    print(res.text)
