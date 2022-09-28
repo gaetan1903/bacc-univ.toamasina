@@ -37,9 +37,9 @@ response = requests.post('https://bacc.univ-toamasina.mg/', cookies=cookies, hea
 
 soup = BeautifulSoup(response.text, 'html.parser')
 res = soup.find('caption')
+print(res.text)
 
 if 'Félicitations' in res.text:
     for tr in soup.find('table').find('tbody'):
         print(tr.text)
-else:
-    print(res.text)
+
